@@ -9,7 +9,9 @@ permissions:
 on:
   workflow_dispatch:
   push:
-    branches: ["master"]
+    branches: 
+     - "master"
+     - "hotfix**"
 
 env:
   GO_VERSION: 1.19
