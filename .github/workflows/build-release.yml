@@ -30,10 +30,7 @@ jobs:
         run: |
           echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
           echo "${{ env.VERSION }}"
-          if: github.event_name != 'pull_request'
-           echo "${{ env.GITHUB_REF_NAME }}"
-           echo "${{ env.GITHUB_REF_NAME }}"
-
+  
       - name: "Extract Branch Name on PUSH"
         run: |
           echo "${{ env.GITHUB_REF_NAME }}"
@@ -42,7 +39,8 @@ jobs:
         # print branch name
       - name: Get branch name
         run: | 
-          echo  "${{ env.BRANCH_NAME}}"
+          echo "${{ env.GITHUB_REF_NAME }}"
+          echo "${{ env.GITHUB_REF_NAME }}"
 
       - name: "Create Image Tag"
         env:
