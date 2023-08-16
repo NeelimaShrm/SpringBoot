@@ -29,4 +29,4 @@ jobs:
       - name: "Create Version Number"
         run: |
           echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
-          echo "${{ GITHUB_ENV }}"
+          echo "${{ GITHUB_ENV.VERSION }}"
