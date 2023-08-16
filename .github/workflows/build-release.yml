@@ -29,4 +29,10 @@ jobs:
       - name: "Create Version Number"
         run: |
           echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
-          echo "${{ env }}"
+          echo "${{ env.VERSION }}"
+
+      - name: "Create Image Tag"
+        env:
+          IMAGE_TAG: v${{ env.VERSION }}
+        run: |
+          echo "${{ env.IMAGE_TAG }}"    
