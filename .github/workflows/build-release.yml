@@ -33,14 +33,18 @@ jobs:
   
       - name: "Extract Branch Name on PUSH"
         run: |
-          echo "${{ env.GITHUB_REF_NAME }}"
-          echo "${{ env.GITHUB_REF_NAME }}"
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+           echo "ref_name=${{ github.base_ref }}"
+           echo "ref_name=${{ github.base_ref }}" >> $GITHUB_OUTPUT || exit 1
+          else
+           echo "ref_name=${{ github.ref_name }}"
+           echo "ref_name=${{ github.ref_name }}" >> $GITHUB_OUTPUT || exit 1
+          fi 
       
         # print branch name
       - name: Get branch name
         run: | 
-          echo "${{ env.GITHUB_REF_NAME }}"
-          echo "${{ env.GITHUB_REF_NAME }}"
+          echo "${{ env.GITHUB_OUTPUT }}"
 
       - name: "Create Image Tag"
         env:
