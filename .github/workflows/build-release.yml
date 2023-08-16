@@ -33,6 +33,6 @@ jobs:
 
       - name: "Create Image Tag"
         env:
-          IMAGE_TAG: v${{ env.VERSION }}
+          IMAGE_TAG: v${{ env.VERSION }}-hotfix
         run: |
           echo "${{ env.IMAGE_TAG }}"    
