@@ -27,19 +27,19 @@ jobs:
           echo "${{ env.VERSION }}"
      
       # print branch name
-      - name: Get branch name
+      - name: Get Branch Name
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             echo "BRANCH_NAME=${{ github.ref_name }}" >> $GITHUB_ENV
-          fi 
+          fi
 
-      - name: Set env IMAGE TAG
+      - name: Create Image Tag
         run: |
-          if [[ "${{ env.BRANCH_NAME }}" != 'master' && $GITHUB_EVENT_NAME == 'workflow_dispatch' ]]; then
+          if [[ "${{ env.BRANCH_NAME }}" != "master" && $GITHUB_EVENT_NAME == "workflow_dispatch" ]]; then
               echo "IMAGE_TAG= v${{ env.VERSION }}-hotfix" >> $GITHUB_ENV
           else
               echo "IMAGE_TAG= v${{ env.VERSION }}" >> $GITHUB_ENV
-          fi    
+          fi  
 
       - name: "GET Image Tag"
         run: |
