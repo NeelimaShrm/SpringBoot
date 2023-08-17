@@ -29,13 +29,13 @@ jobs:
       # print branch name
       - name: Get branch name
         run: |
-          echo ${{ github.base_ref }}
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+           echo "BRANCH_NAME=${{ github.base_ref }}"
            echo "BRANCH_NAME=${{ github.base_ref }}" >> $GITHUB_ENV || exit 1
           else
-           echo ${{ github.ref_name }}
+           echo "BRANCH_NAME=${{ github.ref_name }}"
            echo "BRANCH_NAME=${{ github.ref_name }}" >> $GITHUB_ENV || exit 1
-          fi
+          fi 
 
       - name: Set env IMAGE TAG
         run: |
