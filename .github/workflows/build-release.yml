@@ -29,7 +29,7 @@ jobs:
       # print branch name
       - name: Get branch name
         run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
            echo "BRANCH_NAME=${{ github.base_ref }}"
            echo "BRANCH_NAME=${{ github.base_ref }}" >> $GITHUB_ENV || exit 1
           else
