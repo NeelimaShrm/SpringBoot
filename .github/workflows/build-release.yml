@@ -9,10 +9,6 @@ permissions:
 on:
   workflow_dispatch:
    inputs:
-      environment:
-        description: 'Define env name'     
-        required: true
-        default: 'prod'
       branch:
         description: 'Define branch name'     
         required: true
