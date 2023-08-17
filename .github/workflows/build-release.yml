@@ -8,11 +8,14 @@ permissions:
 
 on:
   workflow_dispatch:
+   inputs:
+      branch:
+        description: 'Define branch name'     
+        required: true
+        default: 'master'
   push:
-    branches: 
-     - "master"
-     - "hotfix**"
-
+    branches: ["master"]
+     
 env:
   GO_VERSION: 1.19
   AWS_REGION: us-east-1
@@ -27,27 +30,18 @@ jobs:
         run: |
           echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
           echo "${{ env.VERSION }}"
-  
-      - name: "Extract Branch Name on PUSH"
-        run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-           echo "BRANCH_NAME=${{ github.base_ref }}"
-           echo "BRANCH_NAME=${{ github.base_ref }}" >> $GITHUB_ENV || exit 1
-          else
-           echo "BRANCH_NAME=${{ github.ref_name }}"
-           echo "BRANCH_NAME=${{ github.ref_name }}" >> $GITHUB_ENV || exit 1
-          fi 
-      
-        # print branch name
+     
+      # print branch name
       - name: Get branch name
         run: | 
-          echo "${{ env.BRANCH_NAME }}"
+          echo "Branch Name: ${{ github.event.inputs.branch }}"
 
       - name: Set env IMAGE TAG
         run: |
-          if [[ "${{ env.BRANCH_NAME }}" != 'master' && $GITHUB_EVENT_NAME == 'push' ]]; then
+          echo ${{ github.event_name }}
+          if [[ "${{ env.BRANCH_NAME }}" != 'master' && $GITHUB_EVENT_NAME == 'workflow_dispatch' ]]; then
               echo "IMAGE_TAG= v${{ env.VERSION }}-hotfix" >> $GITHUB_ENV || exit 1
-          else 
+          else
               echo "IMAGE_TAG= v${{ env.VERSION }}" >> $GITHUB_ENV || exit 1
           fi    
 
