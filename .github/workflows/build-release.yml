@@ -35,7 +35,6 @@ jobs:
 
       - name: Set env IMAGE TAG
         run: |
-          echo ${{ github.event_name }}
           if [[ "${{ env.BRANCH_NAME }}" != 'master' && $GITHUB_EVENT_NAME == 'workflow_dispatch' ]]; then
               echo "IMAGE_TAG= v${{ env.VERSION }}-hotfix" >> $GITHUB_ENV || exit 1
           else
