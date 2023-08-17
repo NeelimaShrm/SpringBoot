@@ -14,10 +14,8 @@ on:
         required: true
         default: 'master'
   push:
-    branches: 
-     - "master"
-     - "hotfix**"
-
+    branches: ["master"]
+     
 env:
   GO_VERSION: 1.19
   AWS_REGION: us-east-1
