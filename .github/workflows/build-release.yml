@@ -36,9 +36,9 @@ jobs:
       - name: Create Image Tag
         run: |
           if [[ "${{ env.BRANCH_NAME }}" != "master" && $GITHUB_EVENT_NAME == "workflow_dispatch" ]]; then
-              echo "IMAGE_TAG= v${{ env.VERSION }}-hotfix" >> $GITHUB_ENV
+              echo "IMAGE_TAG=v${{ env.VERSION }}-hotfix" >> $GITHUB_ENV
           else
-              echo "IMAGE_TAG= v${{ env.VERSION }}" >> $GITHUB_ENV
+              echo "IMAGE_TAG=v${{ env.VERSION }}" >> $GITHUB_ENV
           fi  
 
       - name: "GET Image Tag"
