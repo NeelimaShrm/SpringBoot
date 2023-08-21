@@ -21,6 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: "Create Version Number"
         run: |
           echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
@@ -44,7 +47,13 @@ jobs:
         run: |
           echo "${{ env.IMAGE_TAG }}" 
 
-      - name: "Release - create a docker image"
-        run: |
-          echo "$GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.IMAGE_TAG }}"
-          docker build -t $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.IMAGE_TAG }} .
+      - name: "Release - Create Release"
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.IMAGE_TAG }}
+          name: Release ${{ env.IMAGE_TAG }}
+          draft: false
+          prerelease: false     
