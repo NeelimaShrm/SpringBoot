@@ -9,7 +9,7 @@ permissions:
 on:
   workflow_dispatch:
   push:
-    branches: "hotfix-test"
+    branches: ["master"]
     
      
 env:
