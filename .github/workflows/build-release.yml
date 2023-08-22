@@ -27,7 +27,6 @@ jobs:
  
       - name: "Create Version Number"
         run: |
-          echo "${{ github.ref }}"
           echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
           echo "${{ env.VERSION }}"
      
