@@ -10,6 +10,7 @@ on:
   workflow_dispatch:
   push:
     branches: ["master"]
+    
      
 env:
   GO_VERSION: 1.19
@@ -23,9 +24,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:   
-          fetch-depth: 0
-
+ 
       - name: "Create Version Number"
         run: |
           echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
@@ -55,6 +54,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          target_commitish: ${{ github.ref }}
           tag_name: ${{ env.IMAGE_TAG }}
           name: Release ${{ env.IMAGE_TAG }}
           draft: false
