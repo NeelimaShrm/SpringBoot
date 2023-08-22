@@ -47,6 +47,7 @@ jobs:
       - name: "GET Image Tag"
         run: |
           echo "${{ env.IMAGE_TAG }}" 
+          echo "${{ github.ref }}"
 
       - name: "Release - Create Release"
         id: create_release
