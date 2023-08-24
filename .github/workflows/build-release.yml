@@ -87,7 +87,7 @@ jobs:
         with:
           # NOTE: at now only orgs is supported
           owner: bots-house
-          name: ghcr-phanes
+          name: ghcr-phanes/ghcr-phanes
           # NOTE: using Personal Access Token
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.IMAGE_TAG }}
