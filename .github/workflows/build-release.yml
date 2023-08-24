@@ -82,11 +82,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           delete_release: true
 
-      - name: "Package - Delete Package"  
-        id: delete_package
-        uses: actions/delete-package-versions@v4
+      - name: Delete image
+        uses: bots-house/ghcr-delete-image-action@v1.1.0
         with:
-           package-version-ids: ${{ env.IMAGE_TAG }}
-           package-name: 'ghcr-phanes/ghcr-phanes'
-           package-type: 'container'
-           token: ${{ secrets.GITHUB_TOKEN }}
+          # NOTE: at now only orgs is supported
+          owner: bots-house
+          name: ghcr-phanes
+          # NOTE: using Personal Access Token
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.IMAGE_TAG }}
