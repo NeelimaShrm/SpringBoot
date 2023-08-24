@@ -87,6 +87,6 @@ jobs:
         uses: actions/delete-package-versions@v4
         with:
            package-version-ids: ${{ env.IMAGE_TAG }}
-           package-name: 'ghcr-phanes'
-           package-type: 'npm'
+           package-name: 'ghcr-phanes/ghcr-phanes'
+           package-type: 'container'
            token: ${{ secrets.GITHUB_TOKEN }}
