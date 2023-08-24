@@ -88,3 +88,4 @@ jobs:
         with:
            package-version-ids: ${{ env.IMAGE_TAG }}
            package-name: 'ghcr-phanes'
+           token: ${{ secrets.GITHUB_TOKEN }}
