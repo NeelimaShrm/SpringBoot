@@ -49,6 +49,19 @@ jobs:
           echo "${{ env.IMAGE_TAG }}" 
           echo "${{ github.ref }}"
 
+      - name: "Release - Push Docker Image to GHCR"
+        env:
+          GHCR_REGISTRY: docker.pkg.github.com/neelimashrm/ghcr-phanes
+          GHCR_REPOSITORY: ghcr-phanes
+        run: |
+          cd ./pkg
+          docker build -t $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.IMAGE_TAG }} .
+          docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+          echo "Pushing to GHCR..."
+          docker push $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.IMAGE_TAG }}
+          echo "Docker image pushed to GHCR"
+          docker images    
+
       - name: "Release - Create Release"
         id: create_release
         uses: softprops/action-gh-release@v1
