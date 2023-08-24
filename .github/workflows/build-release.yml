@@ -47,7 +47,6 @@ jobs:
       - name: "GET Image Tag"
         run: |
           echo "${{ env.IMAGE_TAG }}" 
-          echo "${{ github.ref }}"
 
       - name: "Release - Push Docker Image to GHCR"
         env:
