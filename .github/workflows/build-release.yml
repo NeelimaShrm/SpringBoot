@@ -79,6 +79,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ env.VERSION }}
+          tag_name: ${{ env.IMAGE_TAG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           delete_release: true    
