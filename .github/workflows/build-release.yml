@@ -80,4 +80,11 @@ jobs:
         with:
           tag_name: ${{ env.IMAGE_TAG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          delete_release: true    
+          delete_release: true
+
+      - name: "Package - Delete Package"  
+        id: delete_package
+        uses: actions/delete-package-versions@v4
+        with:
+           package-version-ids: ${{ env.IMAGE_TAG }}
+           package-name: 'ghcr-phanes'
