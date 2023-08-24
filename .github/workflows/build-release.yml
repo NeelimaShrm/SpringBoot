@@ -54,7 +54,6 @@ jobs:
           GHCR_REGISTRY: docker.pkg.github.com/neelimashrm/ghcr-phanes
           GHCR_REPOSITORY: ghcr-phanes
         run: |
-          cd ./pkg
           docker build -t $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.IMAGE_TAG }} .
           docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
           echo "Pushing to GHCR..."
