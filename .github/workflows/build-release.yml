@@ -110,7 +110,7 @@ jobs:
           # Keep latest N untagged images
           untagged-keep-latest: 3  
 
-       - name: Delete image
+      - name: Delete image
         uses: bots-house/ghcr-delete-image-action@v1.1.0
         with:
           # NOTE: at now only orgs is supported
