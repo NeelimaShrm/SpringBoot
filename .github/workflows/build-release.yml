@@ -60,6 +60,16 @@ jobs:
           echo "Docker image pushed to GHCR"
           docker images 
 
+      - name: Delete image
+        uses: bots-house/ghcr-delete-image-action@v1.1.0
+        with:
+          # NOTE: at now only orgs is supported
+          owner: ${{ github.repository_owner }}
+          name: SpringBoot/ghcr-phanes/ghcr-phanes
+          # NOTE: using Personal Access Token
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.IMAGE_TAG }}    
+
       - name: "Delete docker image"
         env:
           GHCR_REGISTRY: docker.pkg.github.com/neelimashrm/ghcr-phanes
@@ -109,12 +119,4 @@ jobs:
           # Keep latest N untagged images
           untagged-keep-latest: 3    
 
-      - name: Delete image
-        uses: bots-house/ghcr-delete-image-action@v1.1.0
-        with:
-          # NOTE: at now only orgs is supported
-          owner: ${{ github.repository_owner }}
-          name: docker.pkg.github.com/neelimashrm/ghcr-phanes/ghcr-phanes
-          # NOTE: using Personal Access Token
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ env.IMAGE_TAG }}
+      
