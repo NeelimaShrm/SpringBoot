@@ -87,7 +87,7 @@ jobs:
         with:
           # NOTE: at now only orgs is supported
           owner: ${{ github.repository_owner }}
-          name: ${{ github.event.repository.name }}
+          name: ${{ github.event.repository.name }}/ghcr-phanes/ghcr-phanes
           # NOTE: using Personal Access Token
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.IMAGE_TAG }}
