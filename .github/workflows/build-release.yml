@@ -73,14 +73,13 @@ jobs:
           prerelease: false    
 
       - name: "Release - Delete Release"
-        id: delete_release
-        uses: dev-drprasad/delete-tag-and-release@v1.0
+        id:  delete_release
+        uses: liudonghua123/delete-release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.IMAGE_TAG }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          delete_release: true
+          release_id: ${{ env.IMAGE_TAG }}
+      
 
           
 
