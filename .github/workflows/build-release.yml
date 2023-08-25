@@ -82,6 +82,18 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           delete_release: true
 
+      - name: "Delete Untagged Images"
+        id:  delete_untagged_image
+        uses: bots-house/ghcr-delete-image-action@v1.1.0
+        with:
+          # NOTE: at now only orgs is supported
+          owner: neelimashrm
+          name: ghcr-phanes
+          # NOTE: using Personal Access Token
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # Keep latest N untagged images
+          untagged-keep-latest: 3    
+
       - name: Delete image
         uses: bots-house/ghcr-delete-image-action@v1.1.0
         with:
