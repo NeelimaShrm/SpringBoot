@@ -66,6 +66,14 @@ jobs:
           GHCR_REPOSITORY: ghcr-phanes
         run: |
           docker rmi $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.IMAGE_TAG }} 
+          docker images
+
+      - name: "clean up docker image"
+        uses: chipkent/action-cleanup-package@v1.0.1
+        with:
+          package-name: ${{ github.event.repository.name }}
+          tag: ${{ env.IMAGE_TAG }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}    
 
       - name: "Release - Create Release"
         id: create_release
