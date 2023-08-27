@@ -20,7 +20,7 @@ jobs:
         #  42$
         #  1337$
         prune-tags-regexes: |
-          ^v
+          v20230827-1ee3b95
 
     - name: "Delete release and tag"
       id : delete-tag-release
