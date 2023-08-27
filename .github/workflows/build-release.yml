@@ -78,7 +78,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          release_id: ${{ env.IMAGE_TAG }}
+          release_name: ${{ env.IMAGE_TAG }}
           suppress_errors: flase
       
 
