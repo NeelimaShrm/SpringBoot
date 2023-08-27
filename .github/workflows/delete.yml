@@ -4,7 +4,7 @@ permissions:
   # Allows workflow to create a new tag and release in this repository
   contents: write
   # Allows workflow to publish Docker images
-  packages: write, delete
+  packages: delete
   
   
 on:
