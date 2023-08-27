@@ -9,6 +9,16 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
+      - name: Delete image
+        uses: bots-house/ghcr-delete-image-action@v1.1.0
+        with:
+          # NOTE: at now only orgs is supported
+          owner: NeelimaShrm
+          name: SpringBoot
+          # NOTE: using Personal Access Token
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v20230827-1ee3b95
+          
       - name: "Delete release and tag"
         id : delete-tag-release
         uses: dev-drprasad/delete-tag-and-release@v1.0.1 # PRERELEASE is v1.0 and can also be used to test and give us feedback
