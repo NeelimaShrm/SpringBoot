@@ -12,9 +12,10 @@ jobs:
 
      - name : Delete new 
        uses: liudonghua123/delete-release-action@v1
-       env:
-         token: ${{ secrets.GITHUB_TOKEN }}
+       #env:
+         #token: ${{ secrets.GITHUB_TOKEN }}
        with:
+         token: ${{ secrets.GITHUB_TOKEN }}
          release_name: 'Release v20230827-40b5227'
 
      - name: "Delete release and tag"
