@@ -72,15 +72,6 @@ jobs:
           draft: false
           prerelease: false    
 
-      - name: "Release - Delete Release"
-        id:  delete_release
-        uses: liudonghua123/delete-release-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_name: ${{ env.IMAGE_TAG }}
-          suppress_errors: flase
-
       - name: "Delete release and tag"
         id : delete-tag-release
         uses: dev-drprasad/delete-tag-and-release@v1.0.1 # PRERELEASE is v1.0 and can also be used to test and give us feedback
