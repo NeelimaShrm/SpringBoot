@@ -14,7 +14,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         organization: NeelimaShrm
-        container: ghrc-phanes
+        container: ghrc-phanes/ghcr-phanes
         dry-run: true # Dry-run first, then change to `false`
         #keep-tags-regexes: |
         #  42$
