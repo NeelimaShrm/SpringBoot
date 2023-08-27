@@ -1,8 +1,10 @@
-name: Cleanup PR Images
+name: Delete Release
 
 on:
   workflow_dispatch:
-
+  push:
+    branches: ["master"]
+    
 jobs:
   delete-release:
     name: Delete image from ghcr.io
