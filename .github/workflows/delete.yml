@@ -9,15 +9,11 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
-      - name: Delete image
-        uses: bots-house/ghcr-delete-image-action@v1.1.0
+      - uses: chipkent/action-cleanup-package@v1.0.1
         with:
-          # NOTE: at now only orgs is supported
-          owner: NeelimaShrm
-          name: SpringBoot/ghcr-phanes
-          # NOTE: using Personal Access Token
-          token: ${{ secrets.GITHUB_TOKEN }}
+          package-name: ${{ github.event.repository.name }}
           tag: v20230827-1ee3b95
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: "Delete release and tag"
         id : delete-tag-release
