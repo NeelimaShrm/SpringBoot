@@ -17,7 +17,8 @@ jobs:
          owner: 'NeelimaShrm'
          package-name: 'ghcr-phanes/ghcr-phanes'
          package-type: 'container'
-         num-old-versions-to-delete: 1
+         #num-old-versions-to-delete: 1
+         package-version-ids: 'v20230827-8118d31'
          token: ${{ secrets.GITHUB_TOKEN }}       
 
      - name: "Delete release and tag"
