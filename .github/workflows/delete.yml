@@ -19,4 +19,4 @@ jobs:
           name: SpringBoot
           # NOTE: using Personal Access Token
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: 20230827-8ee0e70
+          tag: v20230827-8ee0e70
