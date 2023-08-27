@@ -18,7 +18,7 @@ jobs:
          package-name: 'ghcr-phanes/ghcr-phanes'
          package-type: 'container'
          #num-old-versions-to-delete: 1
-         package-version-ids: 'v20230827-8118d31'
+         package-version-ids: '122373765'
          token: ${{ secrets.GITHUB_TOKEN }}       
 
      - name: "Delete release and tag"
