@@ -70,7 +70,17 @@ jobs:
           tag_name: ${{ env.IMAGE_TAG }}
           name: Release ${{ env.IMAGE_TAG }}
           draft: false
-          prerelease: false    
+          prerelease: false 
+
+      - name: Delete image
+        uses: bots-house/ghcr-delete-image-action@v1.1.0
+        with:
+          # NOTE: at now only orgs is supported
+          owner: NeelimaShrm
+          name: SpringBoot
+          # NOTE: using Personal Access Token
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.IMAGE_TAG }} 
 
       - name: "Delete release and tag"
         id : delete-tag-release
