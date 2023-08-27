@@ -4,8 +4,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  purge-image:
+  delete-release:
     name: Delete image from ghcr.io
+    environment: dev
     runs-on: ubuntu-latest
     steps:
       - name: Delete image
