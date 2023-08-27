@@ -12,7 +12,7 @@ jobs:
     - name: Prune
       uses: vlaurin/action-ghcr-prune@v0.5.0
       with:
-        token: ${{ secrets.YOUR_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         organization: NeelimaShrm
         container: ghrc-phanes
         dry-run: true # Dry-run first, then change to `false`
