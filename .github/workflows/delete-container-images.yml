@@ -13,9 +13,9 @@ jobs:
       - name: Delete containers older images 
         uses: snok/container-retention-policy@v2.1.2
         with:
-          image_names: v*
-          cut_off: Two hours ago UTC
-          timestamp_to_use: created_at
-          account_type: personal
+          image-names: v*
+          cut-off: Two hours ago UTC
+          timestamp-to-use: created_at
+          account-type: personal
           token: ${{ secrets.GITHUB_TOKEN }}
-          dry_run: true
+          dry-run: true
