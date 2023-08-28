@@ -17,7 +17,6 @@ jobs:
           image-names: v*
           cut-off: 2 minutes ago UTC
           timestamp-to-use: updated_at
-          account-type: users
-          org-name: NeelimaShrm
+          account-type: personal
           keep-at-least: 1
           token: ${{ secrets.GITHUB_TOKEN }}
