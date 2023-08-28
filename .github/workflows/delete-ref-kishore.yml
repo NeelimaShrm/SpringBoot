@@ -1,0 +1,38 @@
+name: Delete Release
+
+permissions:
+  # Allows workflow to create a new tag and release in this repository
+  contents: write
+  # Allows workflow to publish Docker images
+  packages: write
+
+on:
+  workflow_dispatch:
+
+env:
+  GO_VERSION: 1.19
+  AWS_REGION: us-east-1
+
+jobs:
+  delete-release:
+    name: Delete Release
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: "Release - Delete Release"
+        id: delete_release
+        uses: dev-drprasad/delete-tag-and-release@v1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v20230828-eeee5e5
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          delete_release: true 
