@@ -68,4 +68,4 @@ jobs:
           tag_name: ${{ env.IMAGE_TAG }}
           name: Release ${{ env.IMAGE_TAG }}
           draft: false
-          prerelease: true
+          prerelease: false
