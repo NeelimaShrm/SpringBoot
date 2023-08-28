@@ -13,7 +13,7 @@ jobs:
       - name: Delete containers older images 
         uses: snok/container-retention-policy@v2.1.2
         with:
-          image-names: v*
+          image_names: v*
           cut-off: Two hours ago UTC
           timestamp-to-use: created_at
           account-type: personal
