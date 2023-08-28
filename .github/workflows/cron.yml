@@ -1,7 +1,7 @@
 name: "delete-prerelease-packages-ghcr"
-on:
+'on':
   schedule:
-  - cron: "*/1 * * * *"
+    - cron: "*/5 * * * *"
 
 jobs:
   delete-prerelease-packages:
