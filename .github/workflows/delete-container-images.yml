@@ -19,4 +19,4 @@ jobs:
           timestamp-to-use: updated_at
           account-type: personal
           keep-at-least: 1
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: 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
