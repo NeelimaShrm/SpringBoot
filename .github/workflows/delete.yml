@@ -14,8 +14,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with: 
-        package-name: 'test-package'
-        package-type: 'npm'
+        package-name: 'ghcr-phanes%2Fghcr-phanes'
+        package-type: 'container'
         #min-versions-to-keep: 10
         delete-only-pre-release-versions: "true"
 
