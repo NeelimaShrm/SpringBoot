@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Delete containers older images 
-        uses: snok/container-retention-policy@v2
+        uses: snok/container-retention-policy@v2.1.2
         with:
           image-names: v*
           cut-off: 2 minutes ago UTC
