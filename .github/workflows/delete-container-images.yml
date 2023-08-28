@@ -17,5 +17,5 @@ jobs:
           cut-off: Two hours ago UTC
           timestamp-to-use: created_at
           account-type: personal
-          token: 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
+          token: ${{ secrets.GITHUB_TOKEN }}
           dry-run: true
