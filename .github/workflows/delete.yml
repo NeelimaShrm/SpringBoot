@@ -26,11 +26,11 @@ jobs:
     #   with:
        #  release_name: 'Release v20230827-40b5227'
 
-     #- name: "Delete release and tag"
-     #  id : delete-tag-release
-     #  uses: dev-drprasad/delete-tag-and-release@v1.0.1 # PRERELEASE is v1.0 and can also be used to test and give us feedback
-     #  with:
-     #     tag_name: v20230827-1ee3b95 #(required) tag name to delete 
-     #     github_token: ${{ secrets.GITHUB_TOKEN }} # (required) a GitHub token with write access to the repo that needs to be modified
-     #     delete_release: true #(optional) default: true 
+    - name: "Delete release and tag"
+      id : delete-tag-release
+      uses: dev-drprasad/delete-tag-and-release@v1.0.1 # PRERELEASE is v1.0 and can also be used to test and give us feedback
+      with:
+          tag_name: v20230827-1ee3b95 #(required) tag name to delete 
+          github_token: ${{ secrets.GITHUB_TOKEN }} # (required) a GitHub token with write access to the repo that needs to be modified
+          delete_release: true #(optional) default: true 
           #repo: <owner>/<repoName> #(optional) target repository. default: repo running this action
