@@ -1,0 +1,21 @@
+name: Delete old container images
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"  # every five mins
+
+
+jobs:
+  clean-ghcr:
+    name: Delete old unused container images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete containers older images 
+        uses: snok/container-retention-policy@v2
+        with:
+          image-names: v*
+          cut-off: A minute ago UTC
+          account-type: org
+          org-name: cisco-sbg
+          keep-at-least: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
