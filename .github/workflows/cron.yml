@@ -1,11 +1,12 @@
 name: "delete-prerelease-packages-ghcr"
 'on':
+  workflow_dispatch:
   schedule:
     - cron: "*/5 * * * *"
 
 jobs:
   delete-prerelease-packages:
-    name: Delete image from ghcr.io
+    name: Delete packages pushed to ghcr.io
     environment: dev
     runs-on: ubuntu-latest
     steps:
