@@ -9,15 +9,15 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
-    - name : Delete Prerelease version
-      uses: actions/delete-package-versions@v4
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with: 
-        package-name: 'ghcr-phanes/ghcr-phanes'
-        package-type: 'container'
+   # - name : Delete Prerelease version
+   #   uses: actions/delete-package-versions@v4
+   #   env:
+   #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+   #   with: 
+   #     package-name: 'ghcr-phanes/ghcr-phanes'
+   #     package-type: 'container'
         #min-versions-to-keep: 10
-        delete-only-pre-release-versions: "true"
+   #     delete-only-pre-release-versions: "true"
 
     # - name : Delete new 
     #   uses: liudonghua123/delete-release-action@v1
