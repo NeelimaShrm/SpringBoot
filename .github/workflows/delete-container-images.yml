@@ -2,10 +2,9 @@ name: Delete old container images
 
 'on':
   workflow_dispatch:
-  schedule:
-    - cron: "*/5 * * * *"  # every five mins
-
-
+  #schedule:
+  #  - cron: "*/5 * * * *"  # every five mins
+  
 jobs:
   clean-ghcr:
     name: Delete old unused container images
@@ -15,8 +14,8 @@ jobs:
         uses: snok/container-retention-policy@v2.1.2
         with:
           image-names: v*
-          cut-off: 2 minutes ago UTC
-          timestamp-to-use: updated_at
+          cut-off: Two hours ago UTC
+          timestamp-to-use: created_at
           account-type: personal
-          keep-at-least: 1
           token: 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
+          dry-run: true
