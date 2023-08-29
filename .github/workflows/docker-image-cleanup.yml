@@ -5,7 +5,7 @@ on:
   #  - cron:  '33 * * * *'
 env:
   OWNER: NeelimaShrm
-  
+  REPOSITORY: ${{ github.event.repository.name }}
 jobs:
   cleanup-one-old-or-with-the-wrong-name-tag:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
             -s \
             -H "Accept: application/vnd.github.package-deletes-preview+json" \
             -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -d '{"query":"query {repository(owner:\"${{ OWNER }}\", name:\"${{ REPOSITORY }}\") {registryPackages(last:1) {edges{node{id, name, versions(last:100){edges {node {id, updatedAt, version}}}}}}}}"}' \
+            -d '{"query":"query {repository(owner:\"${{ env.OWNER }}\", name:\"${{ env.REPOSITORY }}\") {registryPackages(last:1) {edges{node{id, name, versions(last:100){edges {node {id, updatedAt, version}}}}}}}}"}' \
             -o /tmp/response.json \
             --url https://api.github.com/graphql
       - name: Filter Releases
