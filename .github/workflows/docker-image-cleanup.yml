@@ -24,9 +24,7 @@ jobs:
       - name: Show Release
         id: release
         run: |
-           echo "output-release=$(echo $(cat /tmp/release.json) )" >> $GITHUB_OUTPUT
-           echo $output-release
-           echo $GITHUB_OUTPUT
+           echo $(cat /tmp/release.json)
         #run: printf "::set-output name=id::%s" $(cat /tmp/release.json)
       - name: Delete Release
         uses: WyriHaximus/github-action-delete-package@master
