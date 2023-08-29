@@ -17,13 +17,24 @@ jobs:
       run: |
           docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
           echo "Login to GHCR success ..."
-          imageName=v20230828-f130dd0-hotfix
+          imageName=ghcr.io/neelimashrm/ghcr-phanes/ghcr-phanes
+          imagetag=v20230828-7e34539
           echo $imageName
+          echo $imagetag
+          docker pull ghcr.io/neelimashrm/ghcr-phanes/ghcr-phanes:v20230828-7e34539
+          docker images
+          docker images --filter=reference=ghcr.io/neelimashrm/ghcr-phanes/ghcr-phanes:v20230828-7e34539 -q
           
-          docker rmi "$imageName"
-          docker images 
-          #docker push $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.IMAGE_TAG }}
-          #echo "Docker image pushed to GHCR"
+          
+
+   # - name: "Delete release and tag"
+   #   id : delete-tag-release
+   #   uses: dev-drprasad/delete-tag-and-release@v1.0.1 # PRERELEASE is v1.0 and can also be used to test and give us feedback
+   #   with:
+   #       tag_name: v20230828-bb126d6 #(required) tag name to delete 
+   #       github_token: ${{ secrets.GITHUB_TOKEN }} # (required) a GitHub token with write access to the repo that needs to be modified
+   #       delete_release: true #(optional) default: true 
+          #repo: <owner>/<repoName> #(optional) target repository. default: repo running this action
           
 
    # - name: "Delete release and tag"
