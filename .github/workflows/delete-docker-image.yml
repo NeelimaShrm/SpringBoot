@@ -1,0 +1,38 @@
+name: Delete Docker Image By Tag
+
+on:
+  workflow_dispatch
+    
+jobs:
+  delete-docker-image:
+    name: Delete docker image  by tag from ghcr.io
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: "Login - Docker Image to GHCR"
+      env:
+          GHCR_REGISTRY: docker.pkg.github.com/neelima-org/phanes
+          GHCR_REPOSITORY: ghcr-phanes
+      run: |
+          docker build -t $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.IMAGE_TAG }} .
+          docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+          echo "Login to GHCR success ..."
+          imageName=v20230828-f130dd0-hotfix
+          containerIds=$(docker ps -a | grep "$imageName" | awk '{ print $1 }')
+          docker stop $containerIds
+          docker rm $containerIds
+          docker rmi "$imageName"
+          docker images 
+          #docker push $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.IMAGE_TAG }}
+          #echo "Docker image pushed to GHCR"
+          
+
+   # - name: "Delete release and tag"
+   #   id : delete-tag-release
+   #   uses: dev-drprasad/delete-tag-and-release@v1.0.1 # PRERELEASE is v1.0 and can also be used to test and give us feedback
+   #   with:
+   #       tag_name: v20230828-bb126d6 #(required) tag name to delete 
+   #       github_token: ${{ secrets.GITHUB_TOKEN }} # (required) a GitHub token with write access to the repo that needs to be modified
+   #       delete_release: true #(optional) default: true 
+          #repo: <owner>/<repoName> #(optional) target repository. default: repo running this action
