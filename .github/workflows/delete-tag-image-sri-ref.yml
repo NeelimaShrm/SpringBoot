@@ -15,10 +15,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Delete Release Tag
-      run: |
-        git tag -d ${{ github.event.inputs.release_tag }}
-        git push origin :refs/tags/${{ github.event.inputs.release_tag }}
 
     - name: Delete GHCR Package
       env:
