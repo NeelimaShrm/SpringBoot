@@ -3,6 +3,9 @@ on:
   workflow_dispatch:
   #schedule:
   #  - cron:  '33 * * * *'
+env:
+  OWNER: NeelimaShrm
+  
 jobs:
   cleanup-one-old-or-with-the-wrong-name-tag:
     runs-on: ubuntu-latest
