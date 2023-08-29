@@ -23,7 +23,10 @@ jobs:
         run: "cat /tmp/response.json | jq -r 'def daysAgo(days): (now | floor) - (days * 86400); [.data.repository.registryPackages.edges[0].node.versions.edges | sort_by(.node.updatedAt|fromdate) | reverse | .[] | select( .node.version != \"docker-base-layer\" ) | .value[].node.id] | unique_by(.) | @csv'  | cut -d, -f1  | sed -e 's/^\"//' -e 's/\"$//' > /tmp/release.json"
       - name: Show Release
         id: release
-        run: echo "output-release=$(echo $(cat /tmp/release.json) )" >> $GITHUB_OUTPUT
+        run: |
+           echo "output-release=$(echo $(cat /tmp/release.json) )" >> $GITHUB_OUTPUT
+           echo $output-release
+           echo $GITHUB_OUTPUT
         #run: printf "::set-output name=id::%s" $(cat /tmp/release.json)
       - name: Delete Release
         uses: WyriHaximus/github-action-delete-package@master
