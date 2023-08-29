@@ -32,9 +32,22 @@ jobs:
 
         echo $PACKAGE_ID
 
+
         if [ -n "$PACKAGE_ID" ]; then
           curl -X DELETE -s -H "Authorization: token $CR_PAT" "https://api.github.com/packages/container/$PACKAGE_ID" > /dev/null
           echo "GHCR package deleted successfully."
         else
           echo "No matching GHCR package found."
         fi 
+    
+    -  name: Delete
+       uses: actions/delete-package-versions@v4
+       with:
+         owner: 'NeelimaShrm'
+         package-name: 'ghcr-phanes/ghcr-phanes'
+         package-type: 'container'
+         #num-old-versions-to-delete: 1
+         package-version-ids: $PACKAGE_ID
+         #min-versions-to-keep: 1
+         #delete-only-pre-release-versions: "true"
+         token: ${{ secrets.GITHUB_TOKEN }} 
