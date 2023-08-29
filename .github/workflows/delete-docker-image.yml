@@ -22,6 +22,8 @@ jobs:
           echo $imageName
           echo $imagetag
           docker images
+          docker pull ghcr.io/neelima-org/phanes/ghcr-phanes:v20230828-24f38ed-hotfix
+          docker images
           docker images --filter=reference=ghcr.io/neelimashrm/ghcr-phanes/ghcr-phanes:v20230828-7e34539 -q
          
           
