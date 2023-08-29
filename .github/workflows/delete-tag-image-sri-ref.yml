@@ -2,10 +2,6 @@ name: Delete GHCR Package Release Tag
 
 on:
   workflow_dispatch:
-    inputs:
-      release_tag:
-        description: 'Release tag to delete'
-        required: true
 
 jobs:
   delete_tag_and_package:
@@ -19,9 +15,7 @@ jobs:
     - name: Delete GHCR Package
       env:
         CR_PAT: ${{ secrets.GITHUB_TOKEN }}  # GitHub Personal Access Token with package:read and package:delete scope
-        REPO: ${{ github.repository }}
-        PACKAGE_VERSION: ${{ github.event.inputs.release_tag }}
-       
+        
       run: |
         # Delete package from GHCR
         PACKAGE_ID=$(curl -L \
