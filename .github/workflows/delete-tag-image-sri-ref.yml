@@ -1,0 +1,36 @@
+name: Delete GHCR Package Release Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to delete'
+        required: true
+
+jobs:
+  delete_tag_and_package:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Delete Release Tag
+      run: |
+        git tag -d ${{ github.event.inputs.release_tag }}
+        git push origin :refs/tags/${{ github.event.inputs.release_tag }}
+
+    - name: Delete GHCR Package
+      env:
+        CR_PAT: ${{ secrets.GITHUB_TOKEN }}  # GitHub Personal Access Token with package:read and package:delete scope
+        REPO: ${{ github.repository }}
+        PACKAGE_VERSION: ${{ github.event.inputs.release_tag }}
+      run: |
+        # Delete package from GHCR
+        PACKAGE_ID=$(curl -s -H "Authorization: token $CR_PAT" "https://api.github.com/repos/$REPO/packages/container/$PACKAGE_VERSION" | jq -r '.id')
+        if [ -n "$PACKAGE_ID" ]; then
+          curl -X DELETE -s -H "Authorization: token $CR_PAT" "https://api.github.com/packages/container/$PACKAGE_ID" > /dev/null
+          echo "GHCR package deleted successfully."
+        else
+          echo "No matching GHCR package found."
+        fi 
