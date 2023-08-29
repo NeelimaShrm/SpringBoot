@@ -24,6 +24,7 @@ jobs:
       run: |
         # Delete package from GHCR
         PACKAGE_ID=$(curl -s -H "Authorization: token $CR_PAT" "https://api.github.com/repos/$REPO/packages/container/$PACKAGE_VERSION" | jq -r '.id')
+        echo $PACKAGE_ID
         if [ -n "$PACKAGE_ID" ]; then
           curl -X DELETE -s -H "Authorization: token $CR_PAT" "https://api.github.com/packages/container/$PACKAGE_ID" > /dev/null
           echo "GHCR package deleted successfully."
