@@ -26,7 +26,7 @@ jobs:
         id: release
         run: |
           content=`cat /tmp/release.json`
-          echo "release_output=${{ content }}" >> $GITHUB_OUTPUT
+          echo "release_output=$ content" >> $GITHUB_OUTPUT
           #echo "::set-output name=packageJson::$content"
       - run: |
           echo "${{fromJson(steps.release.outputs.release_output)}}"
