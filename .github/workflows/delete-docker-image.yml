@@ -18,7 +18,9 @@ jobs:
           docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
           echo "Login to GHCR success ..."
           imageName=v20230828-f130dd0-hotfix
+          echo $imageName
           containerIds=$(docker ps -a | grep "$imageName" | awk '{ print $1 }')
+          echo $containerIds
           docker stop $containerIds
           docker rm $containerIds
           docker rmi "$imageName"
