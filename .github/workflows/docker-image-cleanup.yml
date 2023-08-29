@@ -20,7 +20,7 @@ jobs:
             -o /tmp/response.json \
             --url https://api.github.com/graphql
       - name: Filter Releases
-        run: "cat /tmp/response.json | jq -r 'def daysAgo(days): (now | floor) - (days * 86400); [.data.repository.registryPackages.edges[0].node.versions.edges | sort_by(.node.updatedAt|fromdate) | reverse | .[] | select( .node.version != \"docker-base-layer\" ) | .value[].node.id] | unique_by(.) | @csv'  | cut -d, -f1  | sed -e 's/^\"//' -e 's/\"$//' > /tmp/release.json"
+        run: "cat /tmp/response.json | jq -r 'def daysAgo(1): (now | floor) - (days * 86400); [.data.repository.registryPackages.edges[0].node.versions.edges | sort_by(.node.updatedAt|fromdate) | reverse | .[] | select( .node.version != \"docker-base-layer\" ) | .value[].node.id] | unique_by(.) | @csv'  | cut -d, -f1  | sed -e 's/^\"//' -e 's/\"$//' > /tmp/release.json"
       - name: Show Release
         #uses: actions/github-script@v6
         id: release
@@ -28,8 +28,8 @@ jobs:
           content=`cat /tmp/release.json`
           echo "release_output=$ content" >> $GITHUB_OUTPUT
           #echo "::set-output name=packageJson::$content"
-      - run: |
-          echo "${{fromJson(steps.release.outputs.release_output)}}"
+          echo $GITHUB_OUTPUT
+          #echo "${{fromJson(steps.release.outputs.release_output)}}"
            
         #run: printf "::set-output name=id::%s" $(cat /tmp/release.json)
       - name: Delete Release
