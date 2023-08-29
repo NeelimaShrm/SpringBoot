@@ -26,7 +26,7 @@ jobs:
         # Delete package from GHCR
         PACKAGE_ID=$(curl -L \
         -H "Accept: application/vnd.github+json" \
-        -H "Authorization: Bearer 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" \
+        -H "Authorization: Bearer $CR_PAT" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
         https://api.github.com/users/NeelimaShrm/packages/container/ghcr-phanes%2Fghcr-phanes/versions" | jq -r '.id')
 
