@@ -26,10 +26,10 @@ jobs:
         id: release
         run: |
           content=`cat /tmp/release.json`
-          
-          echo "::set-output name=packageJson::$content"
+          echo "release_output=${{ content }}" >> $GITHUB_OUTPUT
+          #echo "::set-output name=packageJson::$content"
       - run: |
-          echo "${{fromJson(steps.release.outputs.packageJson)}}"
+          echo "${{fromJson(steps.release.outputs.release_output)}}"
            
         #run: printf "::set-output name=id::%s" $(cat /tmp/release.json)
       - name: Delete Release
