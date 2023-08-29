@@ -23,7 +23,7 @@ jobs:
           echo $imagetag
           
           docker images --filter=reference=ghcr.io/neelimashrm/ghcr-phanes/ghcr-phanes:v20230828-7e34539 -q
-          echo $imageId
+         
           
 
    # - name: "Delete release and tag"
