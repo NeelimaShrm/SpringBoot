@@ -12,7 +12,7 @@ jobs:
       uses: actions/checkout@v2
 
 
-    - name: Delete GHCR Package
+    - name: Fetch GHCR Package Version ID
       env:
         CR_PAT: ${{ secrets.GITHUB_TOKEN }}  # GitHub Personal Access Token with package:read and package:delete scope
         
@@ -25,15 +25,16 @@ jobs:
         https://api.github.com/users/NeelimaShrm/packages/container/ghcr-phanes%2Fghcr-phanes/versions  | jq '.[].id')
 
         echo $PACKAGE_ID
-    
-    -  name: Delete
-       uses: actions/delete-package-versions@v4
-       with:
-         owner: 'NeelimaShrm'
-         package-name: 'ghcr-phanes/ghcr-phanes'
-         package-type: 'container'
-         #num-old-versions-to-delete: 1
-         package-version-ids: $PACKAGE_ID
-         #min-versions-to-keep: 1
-         #delete-only-pre-release-versions: "true"
-         token: ${{ secrets.GITHUB_TOKEN }} 
+
+    - name: Delete GHCR Package By Version ID
+      env:
+        CR_PAT: ${{ secrets.GITHUB_TOKEN }}  # GitHub Personal Access Token with package:read and package:delete scope
+        
+      run: |
+        # Delete package from GHCR
+        curl -X POST \
+        -H "Accept: application/vnd.github.package-deletes-preview+json" \
+        -H "Authorization: bearer TOKEN" \
+        -d '{"query":"mutation { deletePackageVersion(input:{packageVersionId:\$PACKAGE_ID}) { success }}"}' \
+       
+         
