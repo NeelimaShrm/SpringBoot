@@ -24,7 +24,7 @@ jobs:
         -H "X-GitHub-Api-Version: 2022-11-28" \
         https://api.github.com/users/NeelimaShrm/packages/container/ghcr-phanes%2Fghcr-phanes/versions  | jq '.[].id')
 
-        echo PACKAGE_ID = $PACKAGE_ID >> GITHUB_ENV
+        echo PKG_ID = $PACKAGE_ID >> GITHUB_ENV
 
     - name: Delete GHCR Package By Version ID
       env:
@@ -33,9 +33,10 @@ jobs:
         PACKAGE_NAME: ghcr-phanes%2Fghcr-phanes
       run: |
         # Delete package from GHCR
+        echo ${{env.PKG_ID}}
         curl -L \
         -X DELETE \
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer $CR_PAT" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
-        https://api.github.com/user/packages/${{env.PACKAGE_TYPE}}/${{env.PACKAGE_NAME}}/versions/${{env.PACKAGE_ID}}
+        https://api.github.com/user/packages/${{env.PACKAGE_TYPE}}/${{env.PACKAGE_NAME}}/versions/${{env.PKG_ID}}
