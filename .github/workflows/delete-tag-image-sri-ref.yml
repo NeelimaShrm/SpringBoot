@@ -27,7 +27,7 @@ jobs:
         echo "PKG_ID = $PACKAGE_ID" >> $GITHUB_ENV
         echo $PACKAGE_ID
         echo $GITHUB_ENV
-        echo $PKG_ID
+        echo ${{env.PKG_ID}}
 
     - name: Delete GHCR Package By Version ID
       env:
