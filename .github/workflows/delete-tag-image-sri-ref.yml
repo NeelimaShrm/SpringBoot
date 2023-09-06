@@ -25,6 +25,9 @@ jobs:
         https://api.github.com/users/NeelimaShrm/packages/container/ghcr-phanes%2Fghcr-phanes/versions  | jq '.[].id')
 
         echo PKG_ID = $PACKAGE_ID >> GITHUB_ENV
+        echo $PACKAGE_ID
+        echo GITHUB_ENV
+        echo $PKG_ID
 
     - name: Delete GHCR Package By Version ID
       env:
