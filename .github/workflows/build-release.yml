@@ -37,7 +37,7 @@ jobs:
           echo "${{ github.event_name }}"
 
       - name: 'Release - Check Requested'
-        if: (github.event.action == 'trigger-release')
+        if: (github.event_name == 'worflow_dispatch')
         run: |
           echo "release_requested=true" >> $GITHUB_ENV  
           echo "${{ env.release_requested }}"
