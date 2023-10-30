@@ -48,7 +48,8 @@ jobs:
               echo "IMAGE_TAG=v${{ env.VERSION }}-hotfix" >> $GITHUB_ENV
           else
               echo "IMAGE_TAG=v${{ env.VERSION }}" >> $GITHUB_ENV
-          fi    
+          fi  
+          echo "${{ env.release_requested }}"
 
       - name: "GET Image Tag"
         run: |
