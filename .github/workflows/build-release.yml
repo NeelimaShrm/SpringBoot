@@ -36,6 +36,12 @@ jobs:
           echo "${{ github.event.action }}"
           echo "${{ github.event_name }}"
 
+      - name: 'Release - Check Requested'
+        if: (github.event.action == 'trigger-release')
+        run: |
+          echo "release_requested=true" >> $GITHUB_ENV  
+          echo "${{ env.release_requested }}"
+
       - name: Create Image Tag
         run: |
           if [[ "${{ env.BRANCH_NAME }}" != "master" && $GITHUB_EVENT_NAME == "workflow_dispatch" ]]; then
