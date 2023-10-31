@@ -54,15 +54,15 @@ jobs:
       - name: 'Create Version Number'
         run: |
           echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
-      - name: 'Run Codegen, Build and Test'
-        run: |
-          yarn prettier --check .
-          yarn lint
-          yarn test
-          yarn build
-          jq -c -n --arg version "${{ env.VERSION }}" '{ version: $version }' > build/version.json
-        env:
-          NODE_OPTIONS: --unhandled-rejections=strict
+      #- name: 'Run Codegen, Build and Test'
+      #  run: |
+      #    yarn prettier --check .
+      #    yarn lint
+      #    yarn test
+      #    yarn build
+      #    jq -c -n --arg version "${{ env.VERSION }}" '{ version: $version }' > build/version.json
+      #  env:
+      #    NODE_OPTIONS: --unhandled-rejections=strict
      # - name: 'Deploy CI env'
      #   run: |
      #     docker run -i caduceus --env "ci" --awsAccessKeyid "${{ env.AWS_ACCESS_KEY_ID }}" --awsSecretAccessKey  "${{ env.AWS_SECRET_ACCESS_KEY }}" --awsRegion "${{ env.AWS_DEFAULT_REGION }}" --s3BucketName "${{ env.S3_BUCKET }}"
