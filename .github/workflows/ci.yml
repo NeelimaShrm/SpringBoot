@@ -107,13 +107,17 @@ jobs:
           docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
           docker images
           IMAGE_ID=`docker images --format "{{.ID}}" ghcr-phanes:latest`
-          echo ${{ IMAGE_ID }}
+          echo "$IMAGE_ID" >> $GITHUB_ENV
           echo "Tagging docker image with tag: ${{ env.VERSION }}"
           docker tag ${IMAGE_ID} $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.VERSION }}
           echo "Pushing..."
           docker push $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.VERSION }}
           echo ""
           docker images
+      - name: 'Print IMAGE_ID'
+        run: |
+          echo "Printing Image Id"
+          echo ${{ env.IMAGE_ID }}     
       - name: 'Release - Create Release'
         id: create_release
         uses: actions/create-release@latest
@@ -125,12 +129,10 @@ jobs:
           release_name: Release v${{ env.VERSION }}
           #body: |
           #  ${{ env.RELEASE_NOTES }}
-
-
           #  Install from the command line: docker pull ghcr.io/cisco-sbg/cspe-caduceus/cspe-caduceus:${{ env.VERSION }}
           #  Browse containers: https://github.com/cisco-sbg/cspe-caduceus/pkgs/container/cspe-caduceus%2Fcspe-caduceus
           draft: false
-          prerelease: false
+          prerelease: false     
       #- name: 'Notify WebEx'
       #  uses: qsnyder/action-wxt@ea6ec7075c508a0e39826c2c67173b5de1ace0e2
       #  if: failure()
