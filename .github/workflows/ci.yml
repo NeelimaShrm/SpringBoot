@@ -106,7 +106,7 @@ jobs:
         run: |
           docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
           docker images
-          IMAGE_ID=`docker images --format "{{.ID}}" caduceus:latest`
+          IMAGE_ID=`docker images --format "{{.ID}}" ghcr-phanes:latest`
           echo ${{ IMAGE_ID }}
           echo "Tagging docker image with tag: ${{ env.VERSION }}"
           docker tag ${IMAGE_ID} $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.VERSION }}
