@@ -78,6 +78,8 @@ jobs:
           echo "${{ github.sha }}"
           LAST_TAG='v20231030-df27cf3'
           echo "${LAST_TAG}"
+          COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tail -r)
+          echo "${COMMITS}"
 
       - name: 'Release Notes'
         shell: bash
@@ -87,7 +89,7 @@ jobs:
            # Get list of commits since last tag
            LAST_TAG='v20231030-df27cf3'
            echo "${LAST_TAG}"
-           COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tac)
+           COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tail -r)
            echo "${COMMITS}"
             # Prepare template for release notes file
            NOTES_FILE=$(mktemp /tmp/caduceus-release-notes.$$.XXXXXX)
