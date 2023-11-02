@@ -76,7 +76,7 @@ jobs:
           echo "release_requested flag is set to true"
           echo "${{ github.event.client_payload.hash }}"
           echo "${{ github.sha }}"
-          LAST_TAG=$(git describe --match "v*")
+          LAST_TAG=$(git describe)
           echo "${LAST_TAG}"
 
       - name: 'Release Notes'
