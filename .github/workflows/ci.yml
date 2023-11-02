@@ -78,6 +78,7 @@ jobs:
           echo "${{ github.sha }}"
 
       - name: 'Release Notes'
+        shell: bash
         run: |
            echo "${PWD}"
            ls 
