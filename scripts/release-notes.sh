@@ -1,11 +1,12 @@
 #!/bin/bash
 
 DIR=$(dirname "${0}")
-
+echo "${DIR}"
 # Get list of commits since last tag
 LAST_TAG=$(git describe --match "v*" --abbrev=0)
+echo "${LAST_TAG}"
 COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tac)
-
+echo "${COMMITS}"
 # Prepare template for release notes file
 NOTES_FILE=$(mktemp /tmp/caduceus-release-notes.$$.XXXXXX)
 cat <<EOF > ${NOTES_FILE}
