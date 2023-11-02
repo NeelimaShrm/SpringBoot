@@ -76,6 +76,11 @@ jobs:
           echo "release_requested flag is set to true"
           echo "${{ github.event.client_payload.hash }}"
           echo "${{ github.sha }}"
+
+      - name: 'Release Notes'
+        run: |
+           echo "${PWD}"
+           ${PWD}/scripts/release-notes   
       - name: 'Release - Fail if not Latest Version'
         if: env.release_requested && (github.event.client_payload.hash != github.sha)
         run: |
