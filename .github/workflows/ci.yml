@@ -78,6 +78,8 @@ jobs:
           echo "${{ github.sha }}"
           LAST_TAG='v20231030-df27cf3'
           echo "${LAST_TAG}"
+          LAST_TAG=$(git describe --match "v*" --abbrev=0)
+          echo "${LAST_TAG}"
           COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tac)
           echo "${COMMITS}"
 
