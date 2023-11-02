@@ -78,7 +78,7 @@ jobs:
           echo "${{ github.sha }}"
           LAST_TAG='v20231031-4e28523-hotfix'
           echo "${LAST_TAG}"
-          COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tail -r)
+          COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tac)
           echo "${COMMITS}"
 
       - name: 'Release Notes'
@@ -89,7 +89,7 @@ jobs:
            # Get list of commits since last tag
            LAST_TAG='v20231031-4e28523-hotfix'
            echo "${LAST_TAG}"
-           COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tail -r)
+           COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tac)
            echo "${COMMITS}"
             # Prepare template for release notes file
            NOTES_FILE=$(mktemp /tmp/caduceus-release-notes.$$.XXXXXX)
