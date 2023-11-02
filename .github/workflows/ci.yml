@@ -80,6 +80,7 @@ jobs:
       - name: 'Release Notes'
         run: |
            echo "${PWD}"
+           ls
            /home/runner/work/SpringBoot/scripts/release-notes   
       - name: 'Release - Fail if not Latest Version'
         if: env.release_requested && (github.event.client_payload.hash != github.sha)
