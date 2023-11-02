@@ -76,7 +76,7 @@ jobs:
           echo "release_requested flag is set to true"
           echo "${{ github.event.client_payload.hash }}"
           echo "${{ github.sha }}"
-          LAST_TAG='v20231031-4e28523-hotfix'
+          LAST_TAG='v20231030-df27cf3'
           echo "${LAST_TAG}"
           COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tac)
           echo "${COMMITS}"
@@ -87,7 +87,7 @@ jobs:
            DIR=$(dirname "${0}")
            echo "${DIR}"
            # Get list of commits since last tag
-           LAST_TAG='v20231031-4e28523-hotfix'
+           LAST_TAG='v20231030-df27cf3'
            echo "${LAST_TAG}"
            COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tac)
            echo "${COMMITS}"
