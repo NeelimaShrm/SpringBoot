@@ -40,6 +40,8 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: 'Install Node.js'
         uses: actions/setup-node@v3.6.0
         with:
@@ -76,10 +78,7 @@ jobs:
           echo "release_requested flag is set to true"
           echo "${{ github.event.client_payload.hash }}"
           echo "${{ github.sha }}"
-          LAST_TAG='v20231030-df27cf3'
-          echo "${LAST_TAG}"
-          COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..v20231030-18f754d | tail -r)
-          echo "${COMMITS}"
+          
 
       - name: 'Release Notes'
         shell: bash
@@ -87,11 +86,11 @@ jobs:
            DIR=$(dirname "${0}")
            echo "${DIR}"
            # Get list of commits since last tag
-           LAST_TAG='v20231030-df27cf3'
+           LAST_TAG=$(git describe --match "v*" --abbrev=0)
+           COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tail -r)
            echo "${LAST_TAG}"
-           COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..v20231030-18f754d | tail -r)
            echo "${COMMITS}"
-            # Prepare template for release notes file
+           # Prepare template for release notes file
            NOTES_FILE=$(mktemp /tmp/caduceus-release-notes.$$.XXXXXX)
            cat <<EOF > ${NOTES_FILE}
            __What's New?__
@@ -104,23 +103,18 @@ jobs:
 
            # Let user edit notes and then reconfirm
            vi ${NOTES_FILE}
-           ENCODED_NOTES=$(grep -v '^#' ${NOTES_FILE} | base64  | tr -d \\n)
+           ENCODED_NOTES=$(grep -v '^#' ${NOTES_FILE} | base64  | tr -d \\n) >> $GITHUB_ENV
            rm -f ${NOTES_FILE}
 
            # Reconfirm, mimicing what CI will do
            echo "-------------------------------------------------------------------------"
-           echo "${ENCODED_NOTES}" | base64 -d
+           echo "{{ env.ENCODED_NOTES }}" | base64 -d
            echo "-------------------------------------------------------------------------"
-           read -p "Continue? " -r
-           [[ "${REPLY}" =~ ^[Yy]$ ]] || {
-           echo "Aborted, no release triggered!"
-           exit 2
-           }
 
            # Pick current local version hash and send it also for verification -
            # We want to make sure CI will publish the version we intended and not something newer.
-           HASH=$(git rev-parse HEAD)
-           echo "${ HASH }"
+           HASH=$(git rev-parse HEAD) >> $GITHUB_ENV
+           echo "{{ env.HASH }}"
       - name: 'Release - Fail if not Latest Version'
         if: env.release_requested && (github.event.client_payload.hash != github.sha)
         run: |
