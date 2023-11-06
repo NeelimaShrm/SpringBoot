@@ -2,6 +2,8 @@
 
 DIR=$(dirname "${0}")
 echo "${DIR}"
+echo "HASH=$(git rev-parse HEAD)" >>$GITHUB_ENV
+echo "${{ env.HASH }}"
 # Get list of commits since last tag
 LAST_TAG=$(git describe --match "v*" --abbrev=0)
 echo "${LAST_TAG}"
