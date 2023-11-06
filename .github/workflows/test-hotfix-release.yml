@@ -1,0 +1,182 @@
+name: hotfix-release
+
+permissions:
+  # Allows workflow to create a new tag and release in this repository
+  contents: write
+  # Allows workflow to read and publish Docker images
+  packages: write
+
+# hotfix-release should be triggered manually
+on:
+  workflow_dispatch:
+# concurrency lets us to run latest commited code.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+  CDS_PAT_TOKEN: ${{ secrets.CDS_PAT_TOKEN }}
+  AWS_DEFAULT_REGION: 'us-east-1'
+  S3_BUCKET: 'sbg-sso-terraform-state'
+  FORCE_COLOR: true
+  TF_VERSION: '1.4.2'
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: 'Install Node.js'
+        uses: actions/setup-node@v3.6.0
+        with:
+          node-version: 16.x
+          registry-url: 'https://npm.pkg.github.com'
+      - name: 'Install Dependencies'
+        run: |
+          cp .npmrc.example .npmrc
+          yarn install --frozen-lockfile
+          npm install -g @aws-amplify/cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GPR_READ_TOKEN }}
+      - name: 'Create Version Number'
+        run: |
+          echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
+      - name: 'Run Codegen, Build and Test'
+        run: |
+          yarn prettier --check .
+          yarn lint
+          yarn test
+          yarn build
+          jq -c -n --arg version "${{ env.VERSION }}" '{ version: $version }' > build/version.json
+          yarn docker --build-arg TF_VERSION="${{ env.TF_VERSION }}"
+        env:
+          NODE_OPTIONS: --unhandled-rejections=strict
+       - name: 'Deploy CI env'
+         run: |
+           docker run -i caduceus --env "ci" --awsAccessKeyid "${{ env.AWS_ACCESS_KEY_ID }}" --awsSecretAccessKey  "${{ env.AWS_SECRET_ACCESS_KEY }}" --awsRegion "${{ env.AWS_DEFAULT_REGION }}" --s3BucketName "${{ env.S3_BUCKET }}"
+        - name: 'Deploy preview env'
+         run: |
+           docker run -i caduceus --env "preview" --awsAccessKeyid "${{ env.AWS_ACCESS_KEY_ID }}" --awsSecretAccessKey  "${{ env.AWS_SECRET_ACCESS_KEY }}" --awsRegion "${{ env.AWS_DEFAULT_REGION }}" --s3BucketName "${{ env.S3_BUCKET }}"
+      - name: 'Release - Check Requested'
+        if: ((github.event.action == 'trigger-release') || "${{ env.BRANCH_NAME }}" != "master" && $GITHUB_EVENT_NAME == "workflow_dispatch")
+        run: |
+          echo "release_requested=true" >> $GITHUB_ENV
+          echo "release_requested flag is set to true"
+          echo "${{ github.event.client_payload.hash }}"
+          echo "${{ github.sha }}"
+      - name: 'Release Notes'
+        shell: bash
+        run: |
+          DIR=$(dirname "${0}")
+          echo "${DIR}"
+          # Get list of commits since last tag
+          LAST_TAG=$(git describe --match "v*" --abbrev=0)
+          COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tail -r)
+          echo "${LAST_TAG}"
+          echo "${COMMITS}"
+          # Prepare template for release notes file
+          NOTES_FILE=$(mktemp /tmp/caduceus-release-notes.$$.XXXXXX)
+          cat <<EOF > ${NOTES_FILE}
+          __What's New?__
+
+           ${COMMITS}
+
+          # This will be used to prepare Release Notes.
+          # Lines starting with # will be stripped out.
+          EOF
+
+          # Let user edit notes and then reconfirm
+          vi ${NOTES_FILE}
+          ENCODED_NOTES=$(grep -v '^#' ${NOTES_FILE} | base64  | tr -d \\n) >> $GITHUB_ENV
+          rm -f ${NOTES_FILE}
+
+          # Reconfirm, mimicing what CI will do
+          echo "-------------------------------------------------------------------------"
+          echo "{{ env.ENCODED_NOTES }}" | base64 -d
+          echo "-------------------------------------------------------------------------"
+          
+          # Pick current local version hash and send it also for verification -
+          # We want to make sure CI will publish the version we intended and not something newer.
+          HASH=$(git rev-parse HEAD) >> $GITHUB_ENV
+          echo "{{ env.HASH }}"
+      - name: 'Release - Fail if not Latest Version'
+        if: env.release_requested && (env.HASH != github.sha)
+        run: |
+          echo "${{ env.release_requested }}"
+          echo "Cannot publish - requested git hash (${{env.HASH}}) is different from latest!"
+          exit 1
+      - name: 'Release - Create Version Tag'
+        if: env.release_requested
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "CI Publisher"
+          git tag -m 'v${{ env.VERSION }}' 'v${{ env.VERSION }}'
+          git push --no-verify --tags
+      - name: 'Release - Prepare Release Notes'
+        if: env.release_requested
+        run: |
+          notes=$(echo "${{ env.ENCODED_NOTES }}" | base64 -d)
+          notes="${notes//'%'/'%25'}"
+          notes="${notes//$'\r'/'%0D'}"
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$notes" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "${{ env.ENCODED_NOTES }}"
+          echo "${{ env.notes }}"
+      - name: 'Release - Push Docker Image'
+        if: env.release_requested
+        run: |
+          docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+          docker images
+          IMAGE_ID=`docker images --format "{{.ID}}" ghcr-phanes:latest`
+          echo "$IMAGE_ID" >> $GITHUB_ENV
+          echo "Tagging docker image with tag: ${{ env.VERSION }}"
+          docker tag ${IMAGE_ID} $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.VERSION }}
+          echo "Pushing..."
+          docker push $GHCR_REGISTRY/$GHCR_REPOSITORY:${{ env.VERSION }}
+          echo ""
+          docker images
+      - name: 'Print IMAGE_ID'
+        run: |
+          echo "Printing Image Id"
+          echo ${{ env.IMAGE_ID }}
+      - name: 'Release - Create Release'
+        id: create_release
+        uses: actions/create-release@latest
+        if: env.release_requested
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.VERSION }}
+          release_name: Release v${{ env.VERSION }}
+          body: |
+            ${{ env.RELEASE_NOTES }}
+            Install from the command line: docker pull ghcr.io/cisco-sbg/cspe-caduceus/cspe-caduceus:${{ env.VERSION }}
+            Browse containers: https://github.com/cisco-sbg/cspe-caduceus/pkgs/container/cspe-caduceus%2Fcspe-caduceus
+          draft: false
+          prerelease: false
+      - name: 'Notify WebEx'
+        uses: qsnyder/action-wxt@ea6ec7075c508a0e39826c2c67173b5de1ace0e2
+        if: failure()
+        env:
+          TOKEN: ${{ secrets.WEBEX_BOT_TOKEN }}
+          ROOMID: 46e82800-0212-11ed-a8a7-5f2b9b4e17fd # GitHub space under SxSO Development Team
+          MESSAGE: 'CI failing - https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+      # - name: 'Coverage report'
+      #   uses: irongut/CodeCoverageSummary@v1.3.0
+      #   with:
+      #     filename: 'build/reports/coverage/cobertura-coverage.xml'
+      #     badge: true
+      #     fail_below_min: true
+      #     format: markdown
+      #     hide_branch_rate: false
+      #     indicators: true
+      #     output: both
+      #     thresholds: '80 90'
+      # - name: Adding coverage report to summary
+      #   run: |
+      #     cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
