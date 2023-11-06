@@ -35,8 +35,8 @@ read -p "Continue? " -r
 
 # Pick current local version hash and send it also for verification -
 # We want to make sure CI will publish the version we intended and not something newer.
-HASH=$(git rev-parse HEAD)
-echo "${ HASH }"
+echo "HASH=$(git rev-parse HEAD)" >>$GITHUB_ENV
+echo "${{ env.HASH }}"
 
 # Trigger release
 #"${DIR}/dispatch-event.sh" "trigger-release" "{ \"hash\": \"${HASH}\", \"notes\": \"${ENCODED_NOTES}\" }"
