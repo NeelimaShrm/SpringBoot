@@ -83,38 +83,7 @@ jobs:
       - name: 'Release Notes'
         shell: bash
         run: |
-           DIR=$(dirname "${0}")
-           echo "${DIR}"
-           # Get list of commits since last tag
-           LAST_TAG=$(git describe --match "v*" --abbrev=0)
-           COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tail -r)
-           echo "${LAST_TAG}"
-           echo "${COMMITS}"
-           # Prepare template for release notes file
-           NOTES_FILE=$(mktemp /tmp/caduceus-release-notes.$$.XXXXXX)
-           cat <<EOF > ${NOTES_FILE}
-           __What's New?__
-
-            ${COMMITS}
-
-           # This will be used to prepare Release Notes.
-           # Lines starting with # will be stripped out.
-           EOF
-
-           # Let user edit notes and then reconfirm
-           vi ${NOTES_FILE}
-           ENCODED_NOTES=$(grep -v '^#' ${NOTES_FILE} | base64  | tr -d \\n) >> $GITHUB_ENV
-           rm -f ${NOTES_FILE}
-
-           # Reconfirm, mimicing what CI will do
-           echo "-------------------------------------------------------------------------"
-           echo "{{ env.ENCODED_NOTES }}" | base64 -d
-           echo "-------------------------------------------------------------------------"
-
-           # Pick current local version hash and send it also for verification -
-           # We want to make sure CI will publish the version we intended and not something newer.
-           HASH=$(git rev-parse HEAD) >> $GITHUB_ENV
-           echo "{{ env.HASH }}"
+           ./scripts/release-notes.sh
       - name: 'Release - Fail if not Latest Version'
         if: env.release_requested && (github.event.client_payload.hash != github.sha)
         run: |
