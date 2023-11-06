@@ -83,7 +83,7 @@ jobs:
       - name: 'Release Notes'
         shell: bash
         run: |
-           ./scripts/release-notes.sh
+           chmod +x "./scripts/release-notes.sh"
       - name: 'Release - Fail if not Latest Version'
         if: env.release_requested && (github.event.client_payload.hash != github.sha)
         run: |
