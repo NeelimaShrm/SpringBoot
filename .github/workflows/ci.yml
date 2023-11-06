@@ -85,7 +85,7 @@ jobs:
         run: |
            chmod +x "./scripts/release-notes.sh"
       - name: 'Release - Fail if not Latest Version'
-        if: env.release_requested && (github.event.client_payload.hash != github.sha)
+        if: env.release_requested && ( env.HASH != github.sha )
         run: |
           echo "${{ env.release_requested }}"
           echo "Cannot publish - requested git hash (${{github.event.client_payload.hash}}) is different from latest!"
