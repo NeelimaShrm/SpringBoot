@@ -9,15 +9,6 @@ permissions:
 # CI runs once hourly, or can be triggered manually
 on:
   workflow_dispatch:
-  repository_dispatch:
-    types:
-      - trigger-ci
-      - trigger-release
-  schedule:
-    - cron: '0 */4 * * *'
-  push:
-    branches:
-      - master
 
 # concurrency lets us to run latest commited code.
 concurrency:
