@@ -65,7 +65,7 @@ jobs:
      #   run: |
      #     docker run -i caduceus --env "preview" --awsAccessKeyid "${{ env.AWS_ACCESS_KEY_ID }}" --awsSecretAccessKey  "${{ env.AWS_SECRET_ACCESS_KEY }}" --awsRegion "${{ env.AWS_DEFAULT_REGION }}" --s3BucketName "${{ env.S3_BUCKET }}"
       - name: 'Release - Check Requested'
-        if: (${{ github.event_name }} == "push")
+        if: github.event_name == 'push' 
         run: |
           echo "release_requested=true" >> $GITHUB_ENV
           echo "release_requested flag is set to true"
