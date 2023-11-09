@@ -75,7 +75,7 @@ jobs:
      #   run: |
      #     docker run -i caduceus --env "preview" --awsAccessKeyid "${{ env.AWS_ACCESS_KEY_ID }}" --awsSecretAccessKey  "${{ env.AWS_SECRET_ACCESS_KEY }}" --awsRegion "${{ env.AWS_DEFAULT_REGION }}" --s3BucketName "${{ env.S3_BUCKET }}"
       - name: 'Release - Check Requested'
-        if: ("${{ env.BRANCH_NAME }}" != "master" && $GITHUB_EVENT_NAME == "workflow_dispatch")
+        if: ("$${{ github.ref_name }}" != "master" && $GITHUB_EVENT_NAME == "workflow_dispatch")
         run: |
           echo "release_requested=true" >> $GITHUB_ENV
           echo "release_requested flag is set to true"
@@ -88,11 +88,7 @@ jobs:
         run: |
           DIR=$(dirname "${0}")
           echo "${DIR}"
-          # Get list of commits since last tag
-          LAST_TAG=$(git describe --match "v*" --abbrev=0)
-          echo "${LAST_TAG}"
-          COMMITS=$(git log --pretty='- %s' ${LAST_TAG}..HEAD | tac)
-          echo "${COMMITS}"
+         
       - name: 'Release - Fail if not Latest Version'
         if: env.release_requested && ( env.HASH != github.sha )
         run: |
