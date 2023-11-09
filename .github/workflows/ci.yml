@@ -57,8 +57,7 @@ jobs:
         run: |
           echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
           echo "${{ github.ref_name }}"
-          echo "${{ env.BRANCH_NAME }}"
-          echo "$GITHUB_EVENT_NAME"
+          echo $GITHUB_EVENT_NAME
       #- name: 'Run Codegen, Build and Test'
       #  run: |
       #    yarn prettier --check .
@@ -75,7 +74,7 @@ jobs:
      #   run: |
      #     docker run -i caduceus --env "preview" --awsAccessKeyid "${{ env.AWS_ACCESS_KEY_ID }}" --awsSecretAccessKey  "${{ env.AWS_SECRET_ACCESS_KEY }}" --awsRegion "${{ env.AWS_DEFAULT_REGION }}" --s3BucketName "${{ env.S3_BUCKET }}"
       - name: 'Release - Check Requested'
-        if: ("$${{ github.ref_name }}" != "master" && $GITHUB_EVENT_NAME == "workflow_dispatch")
+        if: ("${{ github.ref_name }}" != "master" && $GITHUB_EVENT_NAME == "workflow_dispatch")
         run: |
           echo "release_requested=true" >> $GITHUB_ENV
           echo "release_requested flag is set to true"
