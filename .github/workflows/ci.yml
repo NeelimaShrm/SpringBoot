@@ -56,8 +56,9 @@ jobs:
       - name: 'Create Version Number'
         run: |
           echo "VERSION=`date '+%Y%m%d'`-`echo ${{github.sha}} | head -c 7`" >> $GITHUB_ENV
+          echo "${{ github.ref_name }}"
           echo "${{ env.BRANCH_NAME }}"
-          $GITHUB_EVENT_NAME
+          echo "$GITHUB_EVENT_NAME"
       #- name: 'Run Codegen, Build and Test'
       #  run: |
       #    yarn prettier --check .
